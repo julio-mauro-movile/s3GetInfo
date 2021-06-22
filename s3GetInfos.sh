@@ -47,7 +47,9 @@ echo "BUCKET,TOTAL OBJECTS,TOTAL SIZE
 
 for S3B in $BUCKETS
 do
+    echo "getting information: from $S3B"
     echo "${S3B},`aws --profile capacity_infra s3 ls  --summarize --human-readable --recursive s3://${S3B} | tail -n 2  | tr '\n' ' ' | awk {'print $3","$6" "$7'}`" >> exit_file
 done
+clear 
 column -t -s, exit_file
 mv exit_file s3GetInfo.csv
