@@ -1,6 +1,5 @@
 #!/bin/bash
-# get all S3 buckets size and total objects
-
+# get S3 buckets size and total objects
 
 while getopts p:b: flag
 do
@@ -19,7 +18,7 @@ Example:
         
         s3GetInfo.sh -p PROFILE-NAME 
         
-Use 'default' if you don't have more than one profile in the ..aws/credentials file.
+Use 'default' if you don't have more than one profile in the .aws/credentials file.
         "
         exit
 fi
@@ -36,7 +35,7 @@ if [ -z "$BUCKETS" ]
 Press CONTROL + C to cancel..."
                 sleep 1
             done
-        BUCKETS=`aws --profile ${PROFILE} s3 ls | awk {'print $3'}`
+        BUCKETS=`aws --profile ${PROFILE} s3 ls | awk {'print $3'} | grep -v amazon.backup.datac.movile.com`
 fi
 clear
 echo "Please wait... creating s3GetInfo.csv file"
@@ -47,8 +46,8 @@ echo "BUCKET,TOTAL OBJECTS,TOTAL SIZE
 
 for S3B in $BUCKETS
 do
-    echo "getting information: from $S3B"
-    echo "${S3B},`aws --profile capacity_infra s3 ls  --summarize --human-readable --recursive s3://${S3B} | tail -n 2  | tr '\n' ' ' | awk {'print $3","$6" "$7'}`" >> exit_file
+    echo "getting information: $S3B"
+    echo "${S3B},`aws --profile ${PROFILE} s3 ls  --summarize --human-readable --recursive s3://${S3B} | tail -n 2  | tr '\n' ' ' | awk {'print $3","$6" "$7'}`" >> exit_file
 done
 clear 
 column -t -s, exit_file
