@@ -35,7 +35,7 @@ if [ -z "$BUCKETS" ]
 Press CONTROL + C to cancel..."
                 sleep 1
             done
-        BUCKETS=`aws --profile ${PROFILE} s3 ls | awk {'print $3'} | grep -v amazon.backup.datac.movile.com`
+        BUCKETS=`aws --profile ${PROFILE} s3 ls | awk {'print $3'}`
 fi
 clear
 echo "Please wait... creating s3GetInfo.csv file"
